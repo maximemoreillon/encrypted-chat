@@ -67,7 +67,11 @@
       <span>Chats</span>
     </Button>
     <div class="flex items-center space-x-2 my-2">
-      <Switch id="decrypted" bind:checked={showDecrypted} />
+      <Switch
+        id="decrypted"
+        bind:checked={showDecrypted}
+        disabled={!keyBase64}
+      />
       <Label for="decrypted">Decrypt</Label>
     </div>
     <div class="grow"></div>
@@ -81,4 +85,7 @@
     {/each}
   </div>
   <MessageForm {chat} {keyBase64} />
+  {#if !keyBase64}
+    <div class="text-red-500 text-center">Encryption key not set</div>
+  {/if}
 {/if}

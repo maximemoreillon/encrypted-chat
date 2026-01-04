@@ -43,8 +43,13 @@
 </script>
 
 <form {onsubmit} class="m-4 flex gap-2">
-  <Input type="text" placeholder="Your message" bind:value={newMessageText} />
-  <Button type="submit">
+  <Input
+    type="text"
+    placeholder="Your message"
+    bind:value={newMessageText}
+    disabled={!keyBase64}
+  />
+  <Button type="submit" disabled={!keyBase64}>
     <SendIcon />
   </Button>
 </form>

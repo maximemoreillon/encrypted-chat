@@ -1,2 +1,3 @@
 - [x] One key per chat
 - [ ] Loaders
+- [ ] Check that encryption key matches that of last message
