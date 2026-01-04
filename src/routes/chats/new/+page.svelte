@@ -15,7 +15,8 @@
 
   let name = $state("New chat");
 
-  async function onsubmit(data: any) {
+  async function onsubmit(e: Event) {
+    e.preventDefault();
     if (!$currentUser) return;
 
     const db = getFirestore();

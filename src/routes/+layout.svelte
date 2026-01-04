@@ -1,16 +1,12 @@
 <script lang="ts">
   import "./layout.css";
   import favicon from "$lib/assets/favicon.svg";
-  import { auth, db } from "$lib/firebase";
+  import { auth } from "$lib/firebase";
   import { currentUser } from "$lib/store";
   import LogoutButton from "$lib/components/logoutButton.svelte";
   import LoginButton from "$lib/components/loginButton.svelte";
   import { Spinner } from "$lib/components/ui/spinner/index.js";
-  import { collection, onSnapshot, query, where } from "firebase/firestore";
-  import type { User } from "firebase/auth";
-  import Button from "$lib/components/ui/button/button.svelte";
-  import MessageSquareIcon from "@lucide/svelte/icons/message-square";
-  import KeyIcon from "@lucide/svelte/icons/key";
+  import MessageSquareLockIcon from "@lucide/svelte/icons/message-square-lock";
 
   let { children } = $props();
   let loading = $state(true);
@@ -27,6 +23,7 @@
 </svelte:head>
 
 <header class="border p-4 flex gap-4 items-center">
+  <MessageSquareLockIcon />
   <h1 class="text-xl">Encrypted chat</h1>
   <div class="grow"></div>
   <!-- <nav class="flex gap-2">

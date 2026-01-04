@@ -59,7 +59,7 @@
       <KeyIcon />
       <!-- <span>Key</span> -->
     </Dialog.Trigger>
-    <Dialog.Content class="sm:max-w-[425px]">
+    <Dialog.Content>
       <Dialog.Header>
         <Dialog.Title>Key</Dialog.Title>
         <!-- <Dialog.Description>

@@ -48,7 +48,7 @@
       <UsersIcon />
       <!-- <span> Users</span> -->
     </Dialog.Trigger>
-    <Dialog.Content class="sm:max-w-[425px]">
+    <Dialog.Content>
       <Dialog.Header>
         <Dialog.Title>Chat users</Dialog.Title>
         <!-- <Dialog.Description>
@@ -77,6 +77,7 @@
 
         <div class="flex gap-2">
           <Input
+            class="grow"
             type="email"
             placeholder="john@example.com"
             bind:value={newUserEmail}
