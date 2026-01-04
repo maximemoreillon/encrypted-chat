@@ -8,12 +8,14 @@
   import { currentUser } from "$lib/store";
   import type { DocumentData } from "firebase/firestore";
   import { onMount } from "svelte";
+  import Spinner from "$lib/components/ui/spinner/spinner.svelte";
 
   let loading = $state(true);
   let chats = $state<DocumentData[]>([]);
 
   const subscribeToChats = () => {
     if (!$currentUser) throw new Error("Current user not available");
+    loading = true;
     const collectionRef = collection(db, "chats");
     const q = query(
       collectionRef,
@@ -22,6 +24,7 @@
 
     onSnapshot(q, ({ docs }) => {
       chats = docs;
+      loading = false;
     });
   };
 
@@ -36,23 +39,27 @@
   </Button>
 </div>
 
-<ul class="flex flex-col gap-2 my-6">
-  {#each chats as chat}
-    <li>
-      <Card.Root>
-        <Card.Header>
-          <Card.Title>{chat.data().name}</Card.Title>
-          <Card.Description>
-            {chat.data().users.join(", ")}
-          </Card.Description>
-        </Card.Header>
-        <!-- <Card.Content>
-        <p>Card Content</p>
-      </Card.Content> -->
-        <Card.Footer class="flex justify-end">
-          <Button href={`/chats/${chat.id}`}>See</Button>
-        </Card.Footer>
-      </Card.Root>
-    </li>
-  {/each}
-</ul>
+{#if loading}
+  <div class="flex justify-center my-8">
+    <Spinner class="size-16" />
+  </div>
+{:else if chats.length}
+  <ul class="flex flex-col gap-2 my-6">
+    {#each chats as chat}
+      <li>
+        <a href={`/chats/${chat.id}`}>
+          <Card.Root>
+            <Card.Header>
+              <Card.Title>{chat.data().name}</Card.Title>
+              <Card.Description>
+                {chat.data().users.join(", ")}
+              </Card.Description>
+            </Card.Header>
+          </Card.Root>
+        </a>
+      </li>
+    {/each}
+  </ul>
+{:else}
+  <div class="my-4 text-center">No chat yet</div>
+{/if}

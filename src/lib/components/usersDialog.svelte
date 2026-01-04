@@ -46,7 +46,7 @@
   <form>
     <Dialog.Trigger class={buttonVariants({})}>
       <UsersIcon />
-      <span> Users</span>
+      <!-- <span> Users</span> -->
     </Dialog.Trigger>
     <Dialog.Content class="sm:max-w-[425px]">
       <Dialog.Header>

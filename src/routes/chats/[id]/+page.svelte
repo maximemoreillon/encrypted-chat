@@ -1,27 +1,29 @@
 <script lang="ts">
-  import { Input } from "$lib/components/ui/input/index.js";
   import { Button } from "$lib/components/ui/button/index.js";
-  import { decrypt, encrypt } from "$lib/cryptography";
+  import { decrypt } from "$lib/cryptography";
   import { onMount } from "svelte";
   import { Label } from "$lib/components/ui/label/index.js";
   import { Switch } from "$lib/components/ui/switch/index.js";
   import Message from "$lib/components/message.svelte";
   import { db } from "$lib/firebase";
+  import UsersDialog from "$lib/components/usersDialog.svelte";
+  import MessageForm from "$lib/components/messageForm.svelte";
+  import KeyDialog from "$lib/components/keyDialog.svelte";
+  import MoveLeftIcon from "@lucide/svelte/icons/move-left";
+  import LockIcon from "@lucide/svelte/icons/lock";
+  import LockOpenIcon from "@lucide/svelte/icons/lock-open";
+
+  import ChatDeleteButton from "$lib/components/chatDeleteButton.svelte";
+  import { page } from "$app/state";
   import {
-    addDoc,
     collection,
     doc,
     onSnapshot,
     orderBy,
     query,
-    serverTimestamp,
     type DocumentData,
   } from "firebase/firestore";
-  import { page } from "$app/state";
-  import UsersDialog from "$lib/components/usersDialog.svelte";
-  import MessageForm from "$lib/components/messageForm.svelte";
-  import KeyDialog from "$lib/components/keyDialog.svelte";
-  import MoveLeftIcon from "@lucide/svelte/icons/move-left";
+  import Spinner from "$lib/components/ui/spinner/spinner.svelte";
 
   let id = page.params.id;
 
@@ -29,25 +31,22 @@
   let showDecrypted = $state(false);
   let messages = $state<DocumentData[]>([]);
   let chat = $state<DocumentData>();
-
-  // TODO: this is not nice, improve
+  let loading = $state(true);
   let keyIsValid = $state(true);
 
   const subscribeToMessages = () => {
     if (!id) return alert("Missing chat ID");
+    loading = true;
     const collectionRef = collection(db, "chats", id, "messages");
     const q = query(collectionRef, orderBy("timestamp", "desc"));
 
     onSnapshot(q, async ({ docs }) => {
       messages = docs;
+      loading = false;
     });
   };
 
   $effect(() => {
-    console.log("effect has run");
-    // Check if key is valid
-    // TODO: this is not nice, improve
-    // PROBLEM: will not run if
     const lastMessage = messages.at(-1);
     if (!lastMessage) return;
     const { ciphertextBase64, ivBase64 } = lastMessage.data();
@@ -71,28 +70,34 @@
   });
 </script>
 
-{#if id && chat}
+{#if loading}
+  <div class="flex justify-center my-8">
+    <Spinner class="size-16" />
+  </div>
+{:else if chat}
   <div class="my-4 flex gap-2">
-    <h2 class="text-3xl">{chat.data().name}</h2>
+    <Button href="/chats" variant="ghost">
+      <MoveLeftIcon />
+    </Button>
+    <h2 class="text-3xl">{chat?.data()?.name}</h2>
   </div>
 
   <!-- Toolbar -->
   <div class="flex gap-2 flex-wrap">
-    <Button href="/chats" variant="outline">
-      <MoveLeftIcon />
-      <span>Chats</span>
-    </Button>
     <div class="flex items-center space-x-2 my-2">
       <Switch
         id="decrypted"
         bind:checked={showDecrypted}
         disabled={!keyBase64 || !keyIsValid}
       />
-      <Label for="decrypted">Decrypt</Label>
+      <Label for="decrypted">
+        <LockOpenIcon />
+      </Label>
     </div>
     <div class="grow"></div>
     <KeyDialog {chat} bind:keyBase64 />
     <UsersDialog {chat} />
+    <ChatDeleteButton {chat} />
   </div>
 
   <div class="flex flex-col gap-2 my-6 items-start">
@@ -108,4 +113,6 @@
   {:else}
     <MessageForm {chat} {keyBase64} />
   {/if}
+{:else}
+  <div class="text-red text-center">Something went wrong</div>
 {/if}
