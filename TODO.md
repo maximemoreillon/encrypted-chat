@@ -1,4 +1,4 @@
 - [x] One key per chat
 - [x] Loaders
 - [x] Check that encryption key matches that of last message
-- [ ] Better decryption of messages
+- [x] Better decryption of messages

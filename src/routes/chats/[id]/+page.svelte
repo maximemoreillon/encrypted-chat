@@ -85,6 +85,9 @@
   <!-- Toolbar -->
   <div class="flex gap-2 flex-wrap">
     <div class="flex items-center space-x-2 my-2">
+      <Label for="decrypted">
+        <LockIcon />
+      </Label>
       <Switch
         id="decrypted"
         bind:checked={showDecrypted}
