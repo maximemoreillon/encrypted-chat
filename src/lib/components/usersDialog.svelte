@@ -28,6 +28,8 @@
 
     const newUsers = [...users(), newUserEmail];
     await setDoc(chatDoc, { users: newUsers }, { merge: true });
+
+    newUserEmail = "";
   }
 
   async function deleteUser(email: string) {
