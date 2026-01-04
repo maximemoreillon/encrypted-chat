@@ -56,8 +56,13 @@
 </script>
 
 {#if id && chat}
+  <div class="my-4 flex gap-2">
+    <h2 class="text-3xl">{chat.data().name}</h2>
+  </div>
+
+  <!-- Toolbar -->
   <div class="flex gap-2 flex-wrap">
-    <Button href="/chats">
+    <Button href="/chats" variant="outline">
       <MoveLeftIcon />
       <span>Chats</span>
     </Button>
