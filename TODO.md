@@ -1,0 +1,2 @@
+- [x] One key per chat
+- [ ] Loaders
