@@ -71,7 +71,7 @@
           <Input
             type={show ? "text" : "password"}
             placeholder="Your key"
-            class="max-w-xs"
+            class=""
             bind:value={keyBase64}
           />
 
