@@ -24,6 +24,7 @@
     type DocumentData,
   } from "firebase/firestore";
   import Spinner from "$lib/components/ui/spinner/spinner.svelte";
+  import ChatRenameDialog from "$lib/components/chatRenameDialog.svelte";
 
   let id = page.params.id;
 
@@ -80,6 +81,9 @@
       <MoveLeftIcon />
     </Button>
     <h2 class="text-3xl">{chat?.data()?.name}</h2>
+    <div class="grow"></div>
+    <ChatRenameDialog {chat} />
+    <ChatDeleteButton {chat} />
   </div>
 
   <!-- Toolbar -->
@@ -100,7 +104,6 @@
     <div class="grow"></div>
     <KeyDialog {chat} bind:keyBase64 />
     <UsersDialog {chat} />
-    <ChatDeleteButton {chat} />
   </div>
 
   <div class="flex flex-col gap-2 my-6 items-start">

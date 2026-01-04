@@ -57,7 +57,7 @@
   <form>
     <Dialog.Trigger class={buttonVariants({})}>
       <KeyIcon />
-      <!-- <span>Key</span> -->
+      <span>Key</span>
     </Dialog.Trigger>
     <Dialog.Content>
       <Dialog.Header>

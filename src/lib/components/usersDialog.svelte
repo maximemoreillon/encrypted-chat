@@ -48,7 +48,7 @@
   <form>
     <Dialog.Trigger class={buttonVariants({})}>
       <UsersIcon />
-      <!-- <span> Users</span> -->
+      <span> Users</span>
     </Dialog.Trigger>
     <Dialog.Content>
       <Dialog.Header>
