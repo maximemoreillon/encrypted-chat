@@ -19,6 +19,7 @@
   }>();
 
   let newMessageText = $state("");
+  let sending = $state(false);
 
   async function onsubmit(e: Event) {
     e.preventDefault();
@@ -26,19 +27,28 @@
     if (!keyBase64) return alert("Missing key");
     if (!$currentUser) return alert("Missing user");
 
-    const { ivBase64, ciphertextBase64 } = await encrypt(
-      newMessageText,
-      keyBase64
-    );
+    sending = true;
 
-    await addDoc(collection(db, "chats", chat.id, "messages"), {
-      ciphertextBase64,
-      ivBase64,
-      sender: $currentUser.email,
-      timestamp: serverTimestamp(),
-    });
+    try {
+      const { ivBase64, ciphertextBase64 } = await encrypt(
+        newMessageText,
+        keyBase64,
+      );
 
-    newMessageText = "";
+      await addDoc(collection(db, "chats", chat.id, "messages"), {
+        ciphertextBase64,
+        ivBase64,
+        sender: $currentUser.email,
+        timestamp: serverTimestamp(),
+      });
+
+      newMessageText = "";
+    } catch (error) {
+      console.error(error);
+      return alert(error);
+    } finally {
+      sending = false;
+    }
   }
 </script>
 
@@ -49,7 +59,7 @@
     bind:value={newMessageText}
     disabled={!keyBase64}
   />
-  <Button type="submit" disabled={!keyBase64}>
+  <Button type="submit" disabled={!keyBase64 || sending || !newMessageText}>
     <SendIcon />
   </Button>
 </form>
