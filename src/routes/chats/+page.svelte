@@ -19,7 +19,7 @@
     const collectionRef = collection(db, "chats");
     const q = query(
       collectionRef,
-      where(`users`, "array-contains", $currentUser.email)
+      where(`users`, "array-contains", $currentUser.email),
     );
 
     onSnapshot(q, ({ docs }) => {
@@ -52,7 +52,10 @@
             <Card.Header>
               <Card.Title>{chat.data().name}</Card.Title>
               <Card.Description>
-                {chat.data().users.join(", ")}
+                {chat.data().users.length} Participant{chat.data().users
+                  .length > 1
+                  ? "s"
+                  : ""}
               </Card.Description>
             </Card.Header>
           </Card.Root>
